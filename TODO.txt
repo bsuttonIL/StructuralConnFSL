@@ -1,0 +1,13 @@
+TO DO with pipeline
+
+Currently, we normalize by volumes of ROI from the high res structural scans.
+Would be better to normalize by volumes in DTI space, based on actual ROI's used. 
+This could be easily accomplished through fslstats -V
+
+
+http://www.ncbi.nlm.nih.gov/pubmed/?term=Leemans+and+Jones+rotate
+Apparently there are tools in FSL to do this:
+Run eddy_correct on the data, then the ecc.log file is used by
+Fdt_rotate_bvecs
+We should incorporate this into the pipeline. We were running eddy_correct on the data, but I am not sure if I am still doing that. Never ran fdt_rotate_bvecs
+Joe – would be interested to see what this does with some of the higher resolution data sets. However, you will need good slice coverage to get a good registration.
