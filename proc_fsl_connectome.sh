@@ -108,6 +108,10 @@ do
   echo "Running Bedpost"
   bedpostx ${DATDIR}
   
+  #create CSF mask
+  chmod +x CSF_mask.sh
+  ./CSF_mask
+
   #converts to hagmann labels
   python ${SCRIPTS_DIR}/convert_fs_labels_to_hagmann.py
   
@@ -117,7 +121,7 @@ do
   cd ${DATBEDPOSTDIR}
   #Run probtrackx 
   echo "Running Probtrackx2"
-  probtrackx2 --network -x ${RESDIR}/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --sampvox=0.0 --forcedir --opd -s ${DATBEDPOSTDIR}/merged -m ${DATBEDPOSTDIR}/nodif_brain_mask --dir=${RESDIR} 
+  probtrackx2 --network -x ${RESDIR}/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --avoid=CSFmask.nii.gz --sampvox=0.0 --forcedir --opd -s ${DATBEDPOSTDIR}/merged -m ${DATBEDPOSTDIR}/nodif_brain_mask --dir=${RESDIR} 
 
   cd ${RESDIR}
 
