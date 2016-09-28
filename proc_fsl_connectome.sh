@@ -75,7 +75,7 @@ do
   
   #PROCESS DTI - make sure nodif brain mask is right size, etc. 
   cd ${DATDIR}
-  fslroi $DTI_raw nodif 0 1
+  fslroi ${DTI_raw} nodif 0 1
 	bet nodif nodif_brain -f 0.1 -m
 	eddy_correct data data_ecc 0
 	fdt_rotate_bvecs bvecs rot_bvecs dti_ecc.ecclog
@@ -113,10 +113,11 @@ do
   ./CSF_mask
 
   #converts to hagmann labels
-  python ${SCRIPTS_DIR}/convert_fs_labels_to_hagmann.py
-  
-  #create masks text file for probtrackx2, OUTPUTS IN RESDIR
-  python ${SCRIPTS_DIR}/create_masks.py
+  # python ${SCRIPTS_DIR}/convert_fs_labels_to_hagmann.py
+  # #create masks text file for probtrackx2, OUTPUTS IN RESDIR
+  # python ${SCRIPTS_DIR}/create_masks.py
+
+  python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
 
   cd ${DATBEDPOSTDIR}
   #Run probtrackx 
