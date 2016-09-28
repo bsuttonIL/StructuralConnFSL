@@ -16,3 +16,5 @@ Joe – would be interested to see what this does with some of the higher resolu
 PAUL:
 Include CSF mask which should be avoided in tractography.
 --avoid=ROIs/CSFmask.nii.gz
+
+ADD multiple parcellation schemes
