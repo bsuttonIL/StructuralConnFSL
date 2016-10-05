@@ -3,15 +3,22 @@
 import os
 import nipype.interfaces.fsl as fsl
 import csv
+from ConfigParser import ConfigParser as ConfigParser
+
+#get parcellation number from connectome config file
+get_config=CFP()
+parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
+pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
+
 
 
 Freesurfer_Regions_dict = {}
 Freesurfer_Regions_list=[]
 
-with open('{}/aparc_cort_subcort_labels.txt'.format(os.environ['CONN_DIR']), 'r') as f:
-	for line in range(88):
+with open('{}/{}'.format(os.environ['CONN_DIR'],parcellation_labels_file), 'r') as f:
+	for line in range(parcellation_num):
 		current_line = f.readline()
-		if line == 87:
+		if line == parcellation_num-1:
 			current_line = current_line.split()
 		else:
 			current_line = current_line[:-1]
@@ -28,7 +35,7 @@ with open('masks.txt', 'w') as f:
 ROI_volumes_csv=[]
 
 #create each ROI niftii file
-for index in range(88):           # index goes 1:68
+for index in range(parcellation_num):           # index goes 1:68
 	# print 'Region Number {}'.format(index+1)
 	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]    
 	get_ROI = fsl.maths.Threshold()
