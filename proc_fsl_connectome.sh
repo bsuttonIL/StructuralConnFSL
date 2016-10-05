@@ -115,6 +115,8 @@ do
   # #create masks text file for probtrackx2, OUTPUTS IN RESDIR
   # python ${SCRIPTS_DIR}/create_masks.py
 
+
+  #Generate ROIs for tractography AND get volumes of each ROI for later weighting in a CSV file
   python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
 
   cd ${DATBEDPOSTDIR}
@@ -126,7 +128,7 @@ do
 
   python ${SCRIPTS_DIR}/FSL_convert_fdtmatrix_csv.py
   # #compute transformation on Connectivity matrix 
-  python ${SCRIPTS_DIR}/FSL_weight_connectome_Hagmann_equation.py 
+  python ${SCRIPTS_DIR}/volume_weight_connectome.py 
   # #add column headers for 
   python ${SCRIPTS_DIR}/add_column_headers.py
   
