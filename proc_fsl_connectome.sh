@@ -46,7 +46,7 @@ do
   #location of freesurfer subject data
   STUDY_FSDIR=${STUDY_SUBJECTS_DIR}/${sub}/
   #location of connectome output
-  STUDY_CONDIR=${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/FSL_68ROI/
+  STUDY_CONDIR=${STUDY_DATA_DIR}/${sub}/${STUDY_CONN_PATH}
   
   #local TEMPORARY data locations for processing
   FSDIR=${SUBJECTS_DIR}/${sub}
@@ -83,21 +83,12 @@ do
   cd ${RESDIR}
        
   
-  
-  
-  
-  #NOW TO FREESURFER
-  
-  #VOLUME OF REGIONS
-  aparcstats2table --hemi rh --subjects ${sub} --meas volume --tablefile rh_volumes_stats.txt
-  aparcstats2table --hemi lh --subjects ${sub} --meas volume --tablefile lh_volumes_stats.txt
-
   #Create registration matrix from DTI -> FS:
   bbregister --s ${sub} --mov ${DATDIR}/nodif_brain.nii.gz --reg ${RESDIR}/diff_2_fs.data --dti --init-fsl
 
 
   #Invert matrix to take FS to DTI Space:
-  mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/aparc+aseg.mgz --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
+  mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/${parcellation_image} --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
   
 
   cd ${RESDIR}  # should still be in there, but just to make sure
@@ -109,12 +100,6 @@ do
   #create CSF mask
   chmod +x CSF_mask.sh
   ./CSF_mask.sh
-
-  #converts to hagmann labels
-  # python ${SCRIPTS_DIR}/convert_fs_labels_to_hagmann.py
-  # #create masks text file for probtrackx2, OUTPUTS IN RESDIR
-  # python ${SCRIPTS_DIR}/create_masks.py
-
 
   #Generate ROIs for tractography AND get volumes of each ROI for later weighting in a CSV file
   python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
