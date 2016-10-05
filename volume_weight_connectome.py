@@ -1,7 +1,7 @@
 #Written by PAUL SHRAP on 10-4-2016
 #Weight connectomes by average volume (number of voxels in each ROI)
 
-from ConfigParser import ConfigParser as ConfigParser
+from ConfigParser import ConfigParser as CFP
 
 #get parcellation number from connectome config file
 get_config=CFP()

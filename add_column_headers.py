@@ -1,7 +1,7 @@
 
 import csv
 import os
-from ConfigParser import ConfigParser as ConfigParser
+from ConfigParser import ConfigParser as CFP
 
 #get parcellation number from connectome config file
 get_config=CFP()
