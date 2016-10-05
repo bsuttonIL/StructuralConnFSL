@@ -27,8 +27,6 @@ mkdir ${DATA_DIR}
 # CONN_DIR=${SCRIPTS_DIR}
 export CONN_DIR
 
-# LOCATION OF FREESURFER subjects directory
-
 
 #Directory that has DTI, INSIDE EACH DATA DIRECTORY
 # data.nii.gz is in ${INSIGHT_DATA_DIR}/${sub}/${DTIPTH}/
@@ -39,7 +37,7 @@ sudo chmod ugo+rwx ${SUBJECTS_DIR}
 for sub in ${sublist} 
 do 
 
-  
+  export sub
   #ORIGINAL DATA LOCATION
   #location of DTI files
   STUDY_DATDIR=${STUDY_DATA_DIR}/${sub}/${STUDY_DTIPTH}/
@@ -110,7 +108,7 @@ do
   
   #create CSF mask
   chmod +x CSF_mask.sh
-  ./CSF_mask
+  ./CSF_mask.sh
 
   #converts to hagmann labels
   # python ${SCRIPTS_DIR}/convert_fs_labels_to_hagmann.py

@@ -2,6 +2,7 @@
 
 import os
 import nipype.interfaces.fsl as fsl
+import csv
 
 
 Freesurfer_Regions_dict = {}
@@ -24,10 +25,12 @@ with open('masks.txt', 'w') as f:
 		f.write('{}/{}.nii.gz\n'.format(os.environ['RESDIR'], roi))
 
 
+ROI_volumes_csv=[]
+
 #create each ROI niftii file
 for index in range(88):           # index goes 1:68
-	print 'Region Number {}'.format(index+1)
-	x = Freesurfer[corROIS[index]]     # x is in the 1000's , cannot overlap with 1:68 or problems will occur.
+	# print 'Region Number {}'.format(index+1)
+	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]    
 	get_ROI = fsl.maths.Threshold()
 	get_ROI.inputs.in_file = 'FS_TO_DTI_cortical.nii.gz'
 	get_ROI.inputs.thresh = x-0.5
@@ -37,6 +40,18 @@ for index in range(88):           # index goes 1:68
 
 	#get volume
 	current_ROI_file='{}.nii.gz',format(Freesurfer_Regions_list[index])
-	get_volume_ROI = fsl.ImageStats()
+	get_volume_ROI = fsl.ImageStats(in_file=current_ROI_file, op_string='-V > ROI_volumes.txt')
+	get_volume_ROI.run()
+
+	roi_volumes_line=[Freesurfer_Regions_list[index]]
+	with open('ROI_volumes.txt', 'r') as f:
+		lines=f.readlines()
+		line=lines[0].split()
+	roi_volumes_line.append(line[0])
+	ROI_volumes_csv.append(roi_volumes_line)
+
+with open('ROI_Volumes.csv', 'w') as f:
+	writer = csv.writer(f)
+	writer.writerows(ROI_volumes_csv)
 
 
