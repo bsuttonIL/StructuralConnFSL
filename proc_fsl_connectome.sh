@@ -25,7 +25,7 @@ mkdir ${DATA_DIR}
 
 # SCRIPTS_DIR=/home/bsutton/Scripts/ProcessingPipelines/StructConn_FSL
 # CONN_DIR=${SCRIPTS_DIR}
-export CONN_DIR
+export SCRIPTS_DIR
 
 
 #Directory that has DTI, INSIDE EACH DATA DIRECTORY
@@ -76,7 +76,7 @@ do
   fslroi ${DTI_raw} nodif 0 1
 	bet nodif nodif_brain -f 0.1 -m
 	eddy_correct data data_ecc 0
-	fdt_rotate_bvecs bvecs rot_bvecs dti_ecc.ecclog
+	fdt_rotate_bvecs ${Bvec_naming} rot_bvecs data_ecc.ecclog
 	mv bvecs old_bvecs && mv rot_bvecs bvecs
 		
 	dtifit -k data_ecc -o dti -m nodif_brain_mask -r bvecs -b bvals
@@ -98,8 +98,8 @@ do
   bedpostx ${DATDIR}
   
   #create CSF mask
-  chmod +x CSF_mask.sh
-  ./CSF_mask.sh
+  chmod +x ${SCRIPTS_DIR}/CSF_mask.sh
+  .{SCRIPTS_DIR}/CSF_mask.sh
 
   #Generate ROIs for tractography AND get volumes of each ROI for later weighting in a CSV file
   python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
@@ -120,11 +120,11 @@ do
   # MOVE RESULTS BACK TO ORIGINAL STUDY FOLDER AND CLEAN UP
   # MOVE connectome_camino_hagmannorder_weighted.csv
 
-  mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
-  mkdir ${STUDY_CONDIR}
-  cp ${RESDIR}/*.csv ${STUDY_CONDIR}
-  mkdir ${STUDY_BEDPOSTDIR}
-  cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
+  # mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
+  # mkdir ${STUDY_CONDIR}
+  # cp ${RESDIR}/*.csv ${STUDY_CONDIR}
+  # mkdir ${STUDY_BEDPOSTDIR}
+  # cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
   
   #rm -Rf ${FSDIR}   # THIS CAN BE USED TO CLEAN UP THE LOCAL FREESURFER DIRECTORY
   #rm -Rf ${DATDIR}

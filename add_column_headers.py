@@ -5,12 +5,13 @@ from ConfigParser import ConfigParser as CFP
 
 #get parcellation number from connectome config file
 get_config=CFP()
+get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
 pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
 cortical_ROIS_list=[]
 
 #put info in labels file into a python list
-with open('{}/{}'.format(os.environ['CONN_DIR'],parcellation_labels_file), 'r') as f:
+with open('{}/{}'.format(os.environ['SCRIPTS_DIR'],parcellation_labels_file), 'r') as f:
 	all_lines=f.readlines()
 	for lines in all_lines:
 		cortical_ROIS_list.append(lines.split()[1])

@@ -7,6 +7,7 @@ from ConfigParser import ConfigParser as CFP
 
 #get parcellation number from connectome config file
 get_config=CFP()
+get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
 pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
 
@@ -15,7 +16,7 @@ pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file'
 Freesurfer_Regions_dict = {}
 Freesurfer_Regions_list=[]
 
-with open('{}/{}'.format(os.environ['CONN_DIR'],parcellation_labels_file), 'r') as f:
+with open('{}/{}'.format(os.environ['SCRIPTS_DIR'],parcellation_labels_file), 'r') as f:
 	for line in range(parcellation_num):
 		current_line = f.readline()
 		if line == parcellation_num-1:
