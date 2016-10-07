@@ -1,13 +1,14 @@
 #!/bin/bash
 
-#start with the freesurfer already run
-#freesurfer is in SUBJECTS_DIR/subid
-#DWI data is in DATA_DIR/subid/DTI/ along with bval and bvecs
+#Created by Paul Sharp and Brad Sutton 10-7-2016
 
-# RUN THIS FIRST IN FREESURFER SUBJECTS DIRECTORY
-  # To convert to Hagmann labels. Need get_subjects.py in same path
-  # THIS IS RUN ON ALL FREESURFER, SO JUST PULL OUT AND RUN SEPARATELY
-  #   python convert_fs_labels_to_hagmann.py
+# This batch file runs creates structural connectomes for any parcellation on 
+# raw DTI data. 
+
+# MUST READ BELOW TO MAKE SURE SCRIPT RUNS:
+# Need a SCRIPTS_DIR with all approriate scripts 
+# Make sure FreeSurfer recon-all is run first 
+  
 
 # !!!!!!!! NOTE: SUBJECTS_DIR must be the temp SUBJECTS DIR, NOT THE ONE ON THE SERVER!
 #  SUBJECTS_DIR must be the /usr/local/freesurfer   !!!!!
@@ -15,22 +16,11 @@
 
 source connectome_variables.cfg
 
-# SUBJECTS_DIR=/usr/local/freesurfer/subjects
-
 sublist=$(<subjects.txt)
 
-# TMP DIRECTORY FOR PROCESSING
-# DATA_DIR=/home/bsutton/Processing
 mkdir ${DATA_DIR}
 
-# SCRIPTS_DIR=/home/bsutton/Scripts/ProcessingPipelines/StructConn_FSL
-# CONN_DIR=${SCRIPTS_DIR}
 export SCRIPTS_DIR
-
-
-#Directory that has DTI, INSIDE EACH DATA DIRECTORY
-# data.nii.gz is in ${INSIGHT_DATA_DIR}/${sub}/${DTIPTH}/
-
 
 sudo chmod ugo+rwx ${SUBJECTS_DIR}
 
@@ -71,7 +61,7 @@ do
   mkdir ${RESDIR}
   cd ${RESDIR}
   
-  #PROCESS DTI - make sure nodif brain mask is right size, etc. 
+  # PROCESS DTI - make sure nodif brain mask is right size, etc. 
   cd ${DATDIR}
   fslroi ${DTI_raw} nodif 0 1
 	bet nodif nodif_brain -f 0.1 -m
@@ -83,11 +73,11 @@ do
   cd ${RESDIR}
        
   
-  #Create registration matrix from DTI -> FS:
+  # Create registration matrix from DTI -> FS:
   bbregister --s ${sub} --mov ${DATDIR}/nodif_brain.nii.gz --reg ${RESDIR}/diff_2_fs.data --dti --init-fsl
 
 
-  #Invert matrix to take FS to DTI Space:
+  # Invert matrix to take FS to DTI Space:
   mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/${parcellation_image} --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
   
 
@@ -97,9 +87,10 @@ do
   echo "Running Bedpost"
   bedpostx ${DATDIR}
   
-  #create CSF mask
+
+  # create CSF mask
   chmod +x ${SCRIPTS_DIR}/CSF_mask.sh
-  .{SCRIPTS_DIR}/CSF_mask.sh
+  ${SCRIPTS_DIR}/CSF_mask.sh
 
   #Generate ROIs for tractography AND get volumes of each ROI for later weighting in a CSV file
   python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
@@ -107,24 +98,25 @@ do
   cd ${DATBEDPOSTDIR}
   #Run probtrackx 
   echo "Running Probtrackx2"
-  probtrackx2 --network -x ${RESDIR}/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --avoid=CSFmask.nii.gz --sampvox=0.0 --forcedir --opd -s ${DATBEDPOSTDIR}/merged -m ${DATBEDPOSTDIR}/nodif_brain_mask --dir=${RESDIR} 
+  probtrackx2 --network -x ${RESDIR}/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --avoid=${RESDIR}/CSFmask.nii.gz --sampvox=0.0 --forcedir --opd -s ${DATBEDPOSTDIR}/merged -m ${DATBEDPOSTDIR}/nodif_brain_mask --dir=${RESDIR} 
 
   cd ${RESDIR}
 
+  #convert naming of raw connectome file
   python ${SCRIPTS_DIR}/FSL_convert_fdtmatrix_csv.py
-  # #compute transformation on Connectivity matrix 
+  #compute transformation on Connectivity matrix 
   python ${SCRIPTS_DIR}/volume_weight_connectome.py 
-  # #add column headers for 
+  #add column headers for connectome file which is required for visualization
   python ${SCRIPTS_DIR}/add_column_headers.py
   
   # MOVE RESULTS BACK TO ORIGINAL STUDY FOLDER AND CLEAN UP
   # MOVE connectome_camino_hagmannorder_weighted.csv
 
-  # mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
-  # mkdir ${STUDY_CONDIR}
-  # cp ${RESDIR}/*.csv ${STUDY_CONDIR}
-  # mkdir ${STUDY_BEDPOSTDIR}
-  # cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
+  mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
+  mkdir ${STUDY_CONDIR}
+  cp ${RESDIR}/*.csv ${STUDY_CONDIR}
+  mkdir ${STUDY_BEDPOSTDIR}
+  cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
   
   #rm -Rf ${FSDIR}   # THIS CAN BE USED TO CLEAN UP THE LOCAL FREESURFER DIRECTORY
   #rm -Rf ${DATDIR}

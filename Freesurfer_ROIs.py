@@ -9,7 +9,7 @@ from ConfigParser import ConfigParser as CFP
 get_config=CFP()
 get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
-pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
+parcellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
 
 
 
@@ -40,14 +40,14 @@ for index in range(parcellation_num):           # index goes 1:68
 	# print 'Region Number {}'.format(index+1)
 	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]    
 	get_ROI = fsl.maths.Threshold()
-	get_ROI.inputs.in_file = 'FS_TO_DTI_cortical.nii.gz'
+	get_ROI.inputs.in_file = 'FS_TO_DTI.nii.gz'
 	get_ROI.inputs.thresh = x-0.5
 	get_ROI.inputs.args = '-uthr {}'.format(x+0.5)
-	get_ROI.inputs.out_file = '{}.nii.gz',format(Freesurfer_Regions_list[index])
+	get_ROI.inputs.out_file = '{}.nii.gz'.format(Freesurfer_Regions_list[index])
 	get_ROI.run()
 
 	#get volume
-	current_ROI_file='{}.nii.gz',format(Freesurfer_Regions_list[index])
+	current_ROI_file='{}.nii.gz'.format(Freesurfer_Regions_list[index])
 	get_volume_ROI = fsl.ImageStats(in_file=current_ROI_file, op_string='-V > ROI_volumes.txt')
 	get_volume_ROI.run()
 

@@ -7,7 +7,7 @@ from ConfigParser import ConfigParser as CFP
 get_config=CFP()
 get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
-pacellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
+parcellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
 cortical_ROIS_list=[]
 
 #put info in labels file into a python list

@@ -2,9 +2,12 @@
 #Weight connectomes by average volume (number of voxels in each ROI)
 
 from ConfigParser import ConfigParser as CFP
+import os
+import csv
 
 #get parcellation number from connectome config file
 get_config=CFP()
+get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
 
 with open('ROI_volumes.csv', 'r') as f:
