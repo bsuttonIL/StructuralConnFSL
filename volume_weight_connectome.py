@@ -10,7 +10,7 @@ get_config=CFP()
 get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
 parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
 
-with open('ROI_volumes.csv', 'r') as f:
+with open('ROI_Volumes.csv', 'r') as f:
 	reader=csv.reader(f)
 	Voxel_nums=[line for line in reader]
 
