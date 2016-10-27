@@ -40,7 +40,7 @@ for index in range(parcellation_num):           # index goes 1:68
 	# print 'Region Number {}'.format(index+1)
 	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]    
 	get_ROI = fsl.maths.Threshold()
-	get_ROI.inputs.in_file = 'FS_TO_DTI.nii.gz'
+	get_ROI.inputs.in_file = 'FS_to_DTI.nii.gz'
 	get_ROI.inputs.thresh = x-0.5
 	get_ROI.inputs.args = '-uthr {}'.format(x+0.5)
 	get_ROI.inputs.out_file = '{}.nii.gz'.format(Freesurfer_Regions_list[index])
