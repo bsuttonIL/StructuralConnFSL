@@ -10,6 +10,7 @@ get_config.readfp(open('freesurfer_variables.cfg'))
 T1_loc=get_config.get('DEFAULT_VARIABLES','T1_location')
 T1_name=get_config.get('DEFAULT_VARIABLES','T1_name')
 fs_log=get_config.get('DEFAULT_VARIABLES','log_freesurfer_recon_all')
+fs_sub_dir=get_config.get('DEFAULT_VARIABLES','subjects_dir')
 
 subjects=[]
 with open('subjects.txt', 'r') as f:
@@ -28,7 +29,7 @@ for sub in subjects:
 	reconall.inputs.subject_id='sub_{}'.format(sub)
 	reconall.inputs.directive='all'
 	reconall.inputs.T1_files=T1_name
-	reconall.inputs.subjects_dir='/usr/local/freesurfer/subjects' 
+	reconall.inputs.subjects_dir=fs_sub_dir
 	reconall.run()
 
 	print 'subject {} finished recon-all!!!'.format(sub)
