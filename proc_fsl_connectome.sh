@@ -64,9 +64,9 @@ do
   # PROCESS DTI - make sure nodif brain mask is right size, etc. 
   cd ${DATDIR}
   fslroi ${DTI_raw} nodif 0 1
-	bet nodif nodif_brain -f 0.1 -m
-	eddy_correct ${DTI_raw} data 0
-	fdt_rotate_bvecs ${Bvec_naming} bvecs data_ecc.ecclog
+  bet nodif nodif_brain -f 0.1 -m
+  eddy_correct ${DTI_raw} data 0
+  fdt_rotate_bvecs ${Bvec_naming} bvecs data.ecclog
 		
   cd ${RESDIR}
        
@@ -83,7 +83,7 @@ do
 
 
   echo "Running Bedpost"
-  bedpostx ${DATDIR}
+  bedpostx ${DATDIR} -n 2
   
 
   # create CSF mask
