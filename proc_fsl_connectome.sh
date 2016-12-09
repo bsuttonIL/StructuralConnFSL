@@ -65,11 +65,9 @@ do
   cd ${DATDIR}
   fslroi ${DTI_raw} nodif 0 1
 	bet nodif nodif_brain -f 0.1 -m
-	eddy_correct data data_ecc 0
-	fdt_rotate_bvecs ${Bvec_naming} rot_bvecs data_ecc.ecclog
-	mv bvecs old_bvecs && mv rot_bvecs bvecs
+	eddy_correct ${DTI_raw} data 0
+	fdt_rotate_bvecs ${Bvec_naming} bvecs data_ecc.ecclog
 		
-	dtifit -k data_ecc -o dti -m nodif_brain_mask -r bvecs -b bvals
   cd ${RESDIR}
        
   
