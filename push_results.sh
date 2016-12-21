@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#Created by Paul Sharp and Brad Sutton 12-21-2016
+
+# This batch file pushes the connectivity and bedpostx results to AWS or a network drive
+
+# MOVE RESULTS BACK TO ORIGINAL STUDY FOLDER AND CLEAN UP
+# MOVE connectome_camino_hagmannorder_weighted.csv
+
+if [ $NETWORK_DRIVE = "1" ];
+then
+   mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
+   mkdir ${STUDY_CONDIR}
+   cp ${RESDIR}/*.csv ${STUDY_CONDIR}
+   mkdir ${STUDY_BEDPOSTDIR}
+  cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
+else
+  aws s3 sync ${RESDIR}/*.csv s3:/${STUDY_CONDIR}
+  aws s3 sync ${DATBEDPOSTDIR} s3:/${STUDY_BEDPOSTDIR}
+fi
