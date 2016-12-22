@@ -23,7 +23,7 @@ mkdir ${DATA_DIR}
 export SCRIPTS_DIR
 export NETWORK_DRIVE
 
-sudo chmod ugo+rwx ${SUBJECTS_DIR}
+#sudo chmod ugo+rwx ${SUBJECTS_DIR}
 
 for sub in ${sublist}
 do
@@ -66,8 +66,11 @@ do
   cd ${DATDIR}
   fslroi ${DTI_raw} nodif 0 1
   bet nodif nodif_brain -f 0.1 -m
-  eddy_correct ${DTI_raw} data 0
-  fdt_rotate_bvecs ${Bvec_naming} bvecs data.ecclog
+  eddy_correct ${DTI_raw} data_corr 0
+  mv data_corr.nii.gz data.nii.gz
+  fdt_rotate_bvecs bvecs bvecs_new data_corr.ecclog
+  mv bvecs bvecs_old
+  cp bvecs_new bvecs
 
   cd ${RESDIR}
 
