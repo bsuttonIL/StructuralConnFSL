@@ -12,6 +12,7 @@ then
   mkdir ${FSDIR}
   cp -r ${STUDY_FSDIR}* ${FSDIR}
 else
+  aws configure set region us-west-2
   aws s3 sync s3:/${STUDY_DATDIR} ${DATDIR}
   mkdir ${FSDIR}
   aws s3 sync s3:/${STUDY_FSDIR} ${FSDIR}

@@ -17,4 +17,6 @@ then
 else
   aws s3 sync ${RESDIR}/*.csv s3:/${STUDY_CONDIR}
   aws s3 sync ${DATBEDPOSTDIR} s3:/${STUDY_BEDPOSTDIR}
+
+  #terminate command here???
 fi
