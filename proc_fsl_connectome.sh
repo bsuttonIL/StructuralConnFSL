@@ -14,13 +14,14 @@
 #  SUBJECTS_DIR must be the /usr/local/freesurfer   !!!!!
 # !!!!!!!!   THERE IS A RM -RF SUBJECT_DIR
 
-source connectome_variables.cfg
+source ~/StructuralConnFSL/connectome_variables.cfg
 
 sublist=$(<subjects.txt)
 
 mkdir ${DATA_DIR}
 
 export SCRIPTS_DIR
+export NETWORK_DRIVE
 
 sudo chmod ugo+rwx ${SUBJECTS_DIR}
 
@@ -39,24 +40,26 @@ do
   STUDY_CONDIR=${RESULTS_DIR}/${sub}/${STUDY_CONN_PATH}
 
   #local TEMPORARY data locations for processing
-  FSDIR=${SUBJECTS_DIR}/${sub}
+  FSDIR=${SUBJECTS_DIR}${sub}/
   DATDIR=${DATA_DIR}/${sub}/DTI/analyses/
   RESDIR=${DATA_DIR}/${sub}/ConnFSL
   DATBEDPOSTDIR=${DATA_DIR}/${sub}/DTI/analyses.bedpostX/
 
   # MOVE DATA OVER TO TEMP DIRECTORIES
-  mkdir ${DATA_DIR}/${sub}/
-  mkdir ${DATA_DIR}/${sub}/DTI/
-  mkdir ${DATDIR}
+  mkdir -p ${DATDIR}
   # mkdir ${DATBEDPOSTDIR}  # We are running bedpost ourselves
 
-  ${SCRIPTS_DIR}/grab_data.sh
-
+  export STUDY_DATDIR
+  export FSDIR
+  export STUDY_FSDIR
   export DATDIR
   export RESDIR
 
+
+  source ${SCRIPTS_DIR}/grab_data.sh
+
   #local results directory
-  mkdir ${RESDIR}
+  mkdir -p ${RESDIR}
   cd ${RESDIR}
 
   # PROCESS DTI - make sure nodif brain mask is right size, etc.
@@ -105,7 +108,7 @@ do
   #add column headers for connectome file which is required for visualization
   python ${SCRIPTS_DIR}/add_column_headers.py
 
-  ${SCRIPTS_DIR}/push_results.sh #!/bin/sh
+  source ${SCRIPTS_DIR}/push_results.sh #!/bin/sh
 
   #rm -Rf ${FSDIR}   # THIS CAN BE USED TO CLEAN UP THE LOCAL FREESURFER DIRECTORY
   #rm -Rf ${DATDIR}

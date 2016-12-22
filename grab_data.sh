@@ -4,8 +4,6 @@
 
 # This batch file grabs the DTI and freesurfer data from AWS or a network drive
 
-
-
 if [ $NETWORK_DRIVE = "1" ];
 then
   cp -r ${STUDY_DATDIR}* ${DATDIR}
