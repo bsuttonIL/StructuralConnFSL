@@ -1,14 +1,15 @@
 #Written by PAUL SHRAP on 10-4-2016
 #Weight connectomes by average volume (number of voxels in each ROI)
 
-from ConfigParser import ConfigParser as CFP
+#from ConfigParser import ConfigParser as CFP
 import os
 import csv
 
 #get parcellation number from connectome config file
-get_config=CFP()
-get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
-parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
+#get_config=CFP()
+#get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
+#parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
+parcellation_num = int(os.environ['parcellation_number'])
 
 with open('ROI_Volumes.csv', 'r') as f:
 	reader=csv.reader(f)
@@ -20,7 +21,7 @@ with open('ROI_Volumes.csv', 'r') as f:
 connectome_unweighted_file = 'conn_{}.csv'.format(parcellation_num)
 with open(connectome_unweighted_file, 'r') as g:
 	reader = csv.reader(g)
-	num_tracts = [l for l in reader]	
+	num_tracts = [l for l in reader]
 	#for each ROI, weight volume of ROIs
 	for ROI in range(parcellation_num):
 		for connection in range(parcellation_num):
@@ -29,4 +30,4 @@ with open(connectome_unweighted_file, 'r') as g:
 
 with open('conn{}_VolumeWeighted.csv'.format(parcellation_num), 'w') as f:
 	writer = csv.writer(f)
-	writer.writerows(num_tracts) 
+	writer.writerows(num_tracts)

@@ -22,8 +22,10 @@ mkdir ${DATA_DIR}
 
 export SCRIPTS_DIR
 export NETWORK_DRIVE
+export parcellation_number
+export parcellation_labels_file
 
-#sudo chmod ugo+rwx ${SUBJECTS_DIR}
+# sudo chmod ugo+rwx ${SUBJECTS_DIR}
 
 for sub in ${sublist}
 do
