@@ -3,13 +3,15 @@
 import os
 import nipype.interfaces.fsl as fsl
 import csv
-from ConfigParser import ConfigParser as CFP
+#from ConfigParser import ConfigParser as CFP
 
 #get parcellation number from connectome config file
-get_config=CFP()
-get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
-parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
-parcellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
+#get_config=CFP()
+#get_config.readfp(open('{}/connectome_variables.cfg'.format(os.environ['SCRIPTS_DIR'])))
+#parcellation_num=int(get_config.get('PARC_SCHEMES','parcellation_number'))
+#parcellation_labels_file=get_config.get('PARC_SCHEMES','parcellation_labels_file')
+parcellation_num = int(os.environ['parcellation_number'])
+parcellation_labels_file = os.environ['parcellation_labels_file']
 
 
 
@@ -38,7 +40,7 @@ ROI_volumes_csv=[]
 #create each ROI niftii file
 for index in range(parcellation_num):           # index goes 1:68
 	# print 'Region Number {}'.format(index+1)
-	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]    
+	x = Freesurfer_Regions_dict[Freesurfer_Regions_list[index]]
 	get_ROI = fsl.maths.Threshold()
 	get_ROI.inputs.in_file = 'FS_to_DTI.nii.gz'
 	get_ROI.inputs.thresh = x-0.5
@@ -61,5 +63,3 @@ for index in range(parcellation_num):           # index goes 1:68
 with open('ROI_Volumes.csv', 'w') as f:
 	writer = csv.writer(f)
 	writer.writerows(ROI_volumes_csv)
-
-
