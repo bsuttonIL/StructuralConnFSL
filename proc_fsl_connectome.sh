@@ -112,7 +112,7 @@ do
   #add column headers for connectome file which is required for visualization
   python ${SCRIPTS_DIR}/add_column_headers.py
 
-  source ${SCRIPTS_DIR}/push_results.sh #!/bin/sh
+  source ${SCRIPTS_DIR}/push_results.sh
 
   #rm -Rf ${FSDIR}   # THIS CAN BE USED TO CLEAN UP THE LOCAL FREESURFER DIRECTORY
   #rm -Rf ${DATDIR}
