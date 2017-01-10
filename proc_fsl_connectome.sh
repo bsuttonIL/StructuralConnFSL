@@ -78,11 +78,12 @@ do
 
 
   # Create registration matrix from DTI -> FS:
-  bbregister --s ${sub} --mov ${DATDIR}/nodif_brain.nii.gz --reg ${RESDIR}/diff_2_fs.data --dti --init-fsl
+  # THIS IS NOT RUNNING!!!!
+  /usr/local/freesurfer/bin/bbregister --s ${sub} --mov ${DATDIR}/nodif_brain.nii.gz --reg ${RESDIR}/diff_2_fs.data --dti --init-fsl
 
 
   # Invert matrix to take FS to DTI Space:
-  mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/${parcellation_image} --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
+  /usr/local/freesurfer/bin/mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/${parcellation_image} --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
 
 
   cd ${RESDIR}  # should still be in there, but just to make sure
