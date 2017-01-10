@@ -94,7 +94,7 @@ do
 
   # create CSF mask
   chmod +x ${SCRIPTS_DIR}/CSF_mask.sh
-  ${SCRIPTS_DIR}/CSF_mask.sh
+  source ${SCRIPTS_DIR}/CSF_mask.sh
 
   #Generate ROIs for tractography AND get volumes of each ROI for later weighting in a CSV file
   python ${SCRIPTS_DIR}/Freesurfer_ROIs.py
