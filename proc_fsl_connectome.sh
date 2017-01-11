@@ -14,6 +14,8 @@
 #  SUBJECTS_DIR must be the /usr/local/freesurfer   !!!!!
 # !!!!!!!!   THERE IS A RM -RF SUBJECT_DIR
 
+sleep 5m
+
 source ~/StructuralConnFSL/connectome_variables.cfg
 
 sublist=$(<subjects.txt)
@@ -74,8 +76,9 @@ do
   mv bvecs bvecs_old
   cp bvecs_new bvecs
 
-  cd ${RESDIR}
+  cd "$RESDIR"
 
+  sleep 5m
 
   # Create registration matrix from DTI -> FS:
   # THIS IS NOT RUNNING!!!!
