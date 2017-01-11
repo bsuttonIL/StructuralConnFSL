@@ -82,8 +82,7 @@ do
   echo  $FREESURFER_HOME
   echo $RESDIR >> resdir.txt
 
-  # Create registration matrix from DTI -> FS:
-  # THIS IS NOT RUNNING!!!!
+  # Create registration matrix from DTI to FS:
   /usr/local/freesurfer/bin/bbregister --s "$sub" --mov "$DATDIR"nodif_brain.nii.gz --reg "$RESDIR"/diff_2_fs.data --dti --init-fsl
 
 
