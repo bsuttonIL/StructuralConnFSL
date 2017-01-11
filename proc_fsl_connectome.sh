@@ -68,7 +68,7 @@ do
   cd ${DATDIR}
   fslroi "$DTI_raw" nodif 0 1
   bet nodif nodif_brain -f 0.1 -m
-  eddy_correct "$DTI_raw" data_corr 0
+  eddy_correct "$DTI_raw" data_corr.nii.gz 0
   mv data_corr.nii.gz data.nii.gz
   fdt_rotate_bvecs bvecs bvecs_new data_corr.ecclog
   mv bvecs bvecs_old
