@@ -66,9 +66,9 @@ do
 
   # PROCESS DTI - make sure nodif brain mask is right size, etc.
   cd ${DATDIR}
-  fslroi ${DTI_raw} nodif 0 1
+  fslroi "$DTI_raw" nodif 0 1
   bet nodif nodif_brain -f 0.1 -m
-  eddy_correct ${DTI_raw} data_corr 0
+  eddy_correct "$DTI_raw" data_corr 0
   mv data_corr.nii.gz data.nii.gz
   fdt_rotate_bvecs bvecs bvecs_new data_corr.ecclog
   mv bvecs bvecs_old
@@ -79,18 +79,18 @@ do
 
   # Create registration matrix from DTI -> FS:
   # THIS IS NOT RUNNING!!!!
-  /usr/local/freesurfer/bin/bbregister --s ${sub} --mov ${DATDIR}/nodif_brain.nii.gz --reg ${RESDIR}/diff_2_fs.data --dti --init-fsl
+  /usr/local/freesurfer/bin/bbregister --s "$sub" --mov "$DATDIR"/nodif_brain.nii.gz --reg "$RESDIR"/diff_2_fs.data --dti --init-fsl
 
 
   # Invert matrix to take FS to DTI Space:
-  /usr/local/freesurfer/bin/mri_vol2vol --mov ${DATDIR}/nodif_brain.nii.gz --targ ${SUBJECTS_DIR}/${sub}/mri/${parcellation_image} --o ${RESDIR}/FS_to_DTI.nii.gz --reg ${RESDIR}/diff_2_fs.data --inv --nearest
+  /usr/local/freesurfer/bin/mri_vol2vol --mov "$DATDIR"/nodif_brain.nii.gz --targ "$SUBJECTS_DIR"/"$sub"/mri/"$parcellation_image" --o "$RESDIR"/FS_to_DTI.nii.gz --reg "$RESDIR"/diff_2_fs.data --inv --nearest
 
 
   cd ${RESDIR}  # should still be in there, but just to make sure
 
 
   echo "Running Bedpost"
-  bedpostx ${DATDIR} -n 2
+  bedpostx "$DATDIR" -n 2
 
 
   # create CSF mask
@@ -102,7 +102,7 @@ do
   cd ${DATBEDPOSTDIR}
   #Run probtrackx
   echo "Running Probtrackx2"
-  probtrackx2 --network -x ${RESDIR}/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --avoid=${RESDIR}/CSFmask.nii.gz --sampvox=0.0 --forcedir --opd -s ${DATBEDPOSTDIR}/merged -m ${DATBEDPOSTDIR}/nodif_brain_mask --dir=${RESDIR}
+  probtrackx2 --network -x "$RESDIR"/masks.txt -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --fibthresh=0.01 --distthresh=0.0 --avoid="$RESDIR"/CSFmask.nii.gz --sampvox=0.0 --forcedir --opd -s "$DATBEDPOSTDIR"/merged -m "$DATBEDPOSTDIR"/nodif_brain_mask --dir="$RESDIR"
 
   cd ${RESDIR}
 
