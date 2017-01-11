@@ -76,9 +76,11 @@ do
   mv bvecs bvecs_old
   cp bvecs_new bvecs
 
-  cd "$RESDIR"
 
-  sleep 5m
+  cd "${RESDIR}"
+
+  echo  $FREESURFER_HOME
+  echo $RESDIR >> resdir.txt
 
   # Create registration matrix from DTI -> FS:
   # THIS IS NOT RUNNING!!!!
