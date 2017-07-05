@@ -14,7 +14,6 @@
 #  SUBJECTS_DIR must be the /usr/local/freesurfer   !!!!!
 # !!!!!!!!   THERE IS A RM -RF SUBJECT_DIR
 
-sleep 5m
 
 source ~/StructuralConnFSL/connectome_variables.cfg
 
