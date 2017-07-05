@@ -9,10 +9,9 @@
 
 if [ $NETWORK_DRIVE = "1" ];
 then
-   mkdir ${STUDY_DATA_DIR}/${sub}/Analyze/Connectome/
-   mkdir ${STUDY_CONDIR}
+   mkdir -p ${STUDY_CONDIR}
    cp ${RESDIR}/*.csv ${STUDY_CONDIR}
-   mkdir ${STUDY_BEDPOSTDIR}
+   mkdir -p ${STUDY_BEDPOSTDIR}
   cp -r ${DATBEDPOSTDIR} ${STUDY_BEDPOSTDIR}
 else
   aws s3 sync ${RESDIR} s3:/${STUDY_CONDIR}
